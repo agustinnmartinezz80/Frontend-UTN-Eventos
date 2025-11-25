@@ -12,17 +12,6 @@ Permite registrar usuarios, iniciar sesión, verificar cuenta por email y admini
 - Vite
 - Context API para autenticación 
 
-
-## Estructura del proyecto
-src/
- ├── components/
- ├── pages/
- ├── context/
- ├── hooks/
- ├── services/
- └── App.jsx
-
-
  ## Funcionalidades
 - Autenticación
 
