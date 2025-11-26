@@ -6,7 +6,7 @@ export default function VerifyEmail() {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/auth/verify/${id}`)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/auth/verify/${id}`)
     }, []);
 
     return <h2>Verificando cuenta...</h2>;
