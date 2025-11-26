@@ -21,7 +21,7 @@ setLoading(false)
 
 
 const register = async (payload) => {
-const res = await api.post('/auth/register', payload)
+const res = await api.post('/api/auth/register', payload)
 return res.data
 }
 
