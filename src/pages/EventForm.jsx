@@ -40,7 +40,7 @@ export default function EventForm() {
         try {
             if (isEditing) {
                 await axios.put(
-                    `${import.meta.env.VITE_API_URL}/events/${id}`,
+                    `${import.meta.env.VITE_API_URL}/api/events/${id}`,
                     formData,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );

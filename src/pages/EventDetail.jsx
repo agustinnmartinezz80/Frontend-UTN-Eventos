@@ -11,7 +11,7 @@ const EventDetail = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await api.get(`/events/${id}`)
+        const res = await api.get(`/api/events/${id}`)
         setEv(res.data)
       } catch (e) {
         setErr(e.response?.data?.message || e.message)
@@ -22,8 +22,8 @@ const EventDetail = () => {
   const onDelete = async () => {
     if (!confirm("¿Eliminar este evento?")) return
     try {
-      await api.delete(`/events/${id}`)
-      navigate('/events')
+      await api.delete(`/api/events/${id}`)
+      navigate('/api/events')
     } catch (e) {
       alert(e.response?.data?.message || e.message)
     }

@@ -9,7 +9,7 @@ export default function EventsList() {
 
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_API_URL}/events`, {
+            .get(`${import.meta.env.VITE_API_URL}/api/events`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then((res) => setEventos(res.data))
@@ -34,7 +34,7 @@ export default function EventsList() {
                     {eventos.map((evento) => (
                         <Link
                             key={evento._id}
-                            to={`/events/${evento._id}`}
+                            to={`/api/events/${evento._id}`}
                             className="p-4 border rounded-lg shadow hover:shadow-md transition bg-white"
                         >
                             <h2 className="text-lg font-bold">{evento.titulo}</h2>
