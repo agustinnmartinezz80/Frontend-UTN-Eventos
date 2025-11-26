@@ -22,7 +22,7 @@ export default function EventForm() {
     useEffect(() => {
         if (isEditing) {
             axios
-                .get(`${import.meta.env.VITE_API_URL}/events/${id}`, {
+                .get(`${import.meta.env.VITE_API_URL}/api/events/${id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
                 .then((res) => setFormData(res.data))
