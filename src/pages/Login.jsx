@@ -15,7 +15,7 @@ export default function Login() {
             const res = await axios.post(
                 `${import.meta.env.VITE_API_URL}/api/auth/login`,
                 { email, password },
-                { withCredentials: true }
+                
             );
 
             // Guardar token y usuario en localStorage
