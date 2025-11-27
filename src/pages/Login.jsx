@@ -11,21 +11,17 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            // ⚡ URL correcta: VITE_API_URL ya apunta a /api
             const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/auth/login`,
-                { email, password },
-                
+                `${import.meta.env.VITE_API_URL}/auth/login`,
+                { email, password }
             );
 
-            // Guardar token y usuario en localStorage
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("user", JSON.stringify(res.data.user));
 
-            // Redirigir a la lista de eventos
             navigate("/events");
         } catch (error) {
-            console.error("Error al iniciar sesión:", error);
+            console.error(error);
             alert(error.response?.data?.message || "Error al iniciar sesión");
         }
     };
