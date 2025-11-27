@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -12,17 +11,18 @@ export default function Login() {
         e.preventDefault();
 
         try {
+            // ⚡ URL corregida: VITE_API_URL ya incluye /api
             const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/auth/login`, // ⚡ asegúrate que VITE_API_URL incluye /api
+                `${import.meta.env.VITE_API_URL}/auth/login`,
                 { email, password },
-                { withCredentials: true } // si tu backend usa cookies
+                { withCredentials: true } // si tu backend envía cookies
             );
 
             // Guardar token y usuario en localStorage
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("user", JSON.stringify(res.data.user));
 
-            // Redirigir a la lista de eventos sin recargar
+            // Redirigir a la lista de eventos
             navigate("/events");
         } catch (error) {
             console.error("Error al iniciar sesión:", error);
