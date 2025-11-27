@@ -27,7 +27,7 @@ return res.data
 
 
 const verifyEmail = async (token) => {
-const res = await api.get(`/auth/verify?token=${token}`)
+const res = await api.get(`/api/auth/verify?token=${token}`)
 return res.data
 }
 
