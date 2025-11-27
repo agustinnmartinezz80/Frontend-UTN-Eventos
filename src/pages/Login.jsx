@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
+    const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -11,15 +12,7 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/auth/login`, // asegúrate que VITE_API_URL termina en /api
-                { email, password },
-                { withCredentials: true } // importante para que el backend acepte cookies
-            );
-
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("user", JSON.stringify(res.data.user));
-
+            await login({ email, password });
             navigate("/events");
         } catch (error) {
             console.error(error);
@@ -50,6 +43,7 @@ export default function Login() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full border border-gray-300 rounded-lg p-2"
+                        autoComplete="current-password"
                         required
                     />
                 </div>
