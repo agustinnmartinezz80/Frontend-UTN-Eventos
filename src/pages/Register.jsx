@@ -18,7 +18,7 @@ e.preventDefault()
 try {
 await register(form)
 setMsg('Registrado. Revisa tu email para verificar la cuenta.')
-setTimeout(() => navigate('/login'), 2500)
+setTimeout(() => navigate('/api/auth/login'), 2500)
 } catch (err) {
 setMsg(err.response?.data?.message || err.message)
 }
