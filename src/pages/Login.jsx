@@ -1,27 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { loginUser } from "../services/authService";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    // Ping al backend para despertarlo al cargar la página
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/auth/ping`).catch(() => { });
+    }, []);
+
     const handleLogin = async (e) => {
         e.preventDefault();
-
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-                email,
-                password,
-            });
-
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("user", JSON.stringify(res.data.user));
-
+            const data = await loginUser(email, password);
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
             navigate("/events");
         } catch (error) {
-            alert(error.response?.data?.message || "Error al iniciar sesión");
+            // Retry automático si falla por cold start
+            console.warn("Primer intento falló, reintentando...", error);
+            try {
+                const data = await loginUser(email, password);
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
+                navigate("/events");
+            } catch (error2) {
+                alert(error2.response?.data?.message || "Error al iniciar sesión");
+            }
         }
     };
 
