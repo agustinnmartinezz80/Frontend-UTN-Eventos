@@ -12,7 +12,7 @@ export default function Login() {
 
         try {
             const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/auth/login`, // asegúrate que VITE_API_URL termina en /api
+                `${import.meta.env.VITE_API_URL}/api/auth/login`, // asegúrate que VITE_API_URL termina en /api
                 { email, password },
                 { withCredentials: true } // importante para que el backend acepte cookies
             );
