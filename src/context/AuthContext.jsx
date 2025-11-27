@@ -33,7 +33,7 @@ return res.data
 
 
 const login = async (payload) => {
-const res = await api.post('/auth/login', payload)
+const res = await api.post('/api/auth/login', payload)
 const { token, user } = res.data
 localStorage.setItem('token', token)
 localStorage.setItem('user', JSON.stringify(user))
@@ -46,7 +46,7 @@ const logout = () => {
 localStorage.removeItem('token')
 localStorage.removeItem('user')
 setUser(null)
-navigate('/login')
+navigate('/api/auth/login')
 }
 
 
