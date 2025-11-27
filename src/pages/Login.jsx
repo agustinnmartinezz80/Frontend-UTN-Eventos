@@ -11,11 +11,11 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            // ⚡ URL corregida: VITE_API_URL ya incluye /api
+            // ⚡ URL correcta: VITE_API_URL ya apunta a /api
             const res = await axios.post(
                 `${import.meta.env.VITE_API_URL}/auth/login`,
                 { email, password },
-                { withCredentials: true } // si tu backend envía cookies
+                { withCredentials: true }
             );
 
             // Guardar token y usuario en localStorage
