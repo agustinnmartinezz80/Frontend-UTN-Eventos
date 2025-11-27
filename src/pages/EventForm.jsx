@@ -19,6 +19,7 @@ export default function EventForm() {
 
     const token = localStorage.getItem("token");
 
+    // Traer evento si estamos editando
     useEffect(() => {
         if (isEditing) {
             axios
@@ -39,14 +40,16 @@ export default function EventForm() {
 
         try {
             if (isEditing) {
+                // Editar evento
                 await axios.put(
                     `${import.meta.env.VITE_API_URL}/api/events/${id}`,
                     formData,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
             } else {
+                // Crear nuevo evento
                 await axios.post(
-                    `${import.meta.env.VITE_API_URL}/events`,
+                    `${import.meta.env.VITE_API_URL}/api/events`, // <-- CORRECCIÓN IMPORTANTE
                     formData,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -114,7 +117,6 @@ export default function EventForm() {
                     ></textarea>
                 </div>
 
-
                 <div>
                     <label className="block text-gray-600 mb-1">Tipo de evento</label>
                     <select
@@ -156,7 +158,6 @@ export default function EventForm() {
                     />
                 </div>
 
-
                 <button
                     type="submit"
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition-all"
@@ -167,6 +168,3 @@ export default function EventForm() {
         </div>
     );
 }
-
-
-

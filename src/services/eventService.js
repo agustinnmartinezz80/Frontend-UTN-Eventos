@@ -2,27 +2,37 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL + "/api/events";
 
-export const getEventos = async () => {
-    const res = await axios.get(API_URL, { withCredentials: true });
-    return res.data;
-};
-
+// Crear evento
 export const createEvento = async (evento) => {
-    const res = await axios.post(API_URL, evento, { withCredentials: true });
-    return res.data;
+    const token = localStorage.getItem("token"); // JWT del login
+
+    try {
+        const res = await axios.post(API_URL, evento, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error.response?.data || error.message);
+        throw error;
+    }
 };
 
-export const getEventoById = async (id) => {
-    const res = await axios.get(`${API_URL}/${id}`, { withCredentials: true });
-    return res.data;
-};
+// Traer todos los eventos del usuario
+export const getEventos = async () => {
+    const token = localStorage.getItem("token");
 
-export const updateEvento = async (id, evento) => {
-    const res = await axios.put(`${API_URL}/${id}`, evento, { withCredentials: true });
-    return res.data;
-};
-
-export const deleteEvento = async (id) => {
-    const res = await axios.delete(`${API_URL}/${id}`, { withCredentials: true });
-    return res.data;
+    try {
+        const res = await axios.get(API_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error.response?.data || error.message);
+        throw error;
+    }
 };
