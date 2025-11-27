@@ -1,81 +1,68 @@
-import React, { useEffect, useState } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import api from '../api/api'
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const EventDetail = () => {
-  const { id } = useParams()
-  const [ev, setEv] = useState(null)
-  const [err, setErr] = useState(null)
-  const navigate = useNavigate()
+export default function EventDetail() {
+  const { id } = useParams();
+  const [event, setEvent] = useState(null);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
+    const fetchEvent = async () => {
       try {
-        const res = await api.get(`/api/events/${id}`)
-        setEv(res.data)
-      } catch (e) {
-        setErr(e.response?.data?.message || e.message)
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/events/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setEvent(res.data);
+      } catch (error) {
+        console.error("Error al cargar el evento:", error);
+        alert("No se pudo cargar el evento.");
       }
-    })()
-  }, [id])
+    };
 
-  const onDelete = async () => {
-    if (!confirm("¿Eliminar este evento?")) return
+    fetchEvent();
+  }, [id, token]);
+
+  const handleDelete = async () => {
+    if (!window.confirm("¿Estás seguro que quieres eliminar este evento?")) return;
+
     try {
-      await api.delete(`/api/events/${id}`)
-      navigate('/api/events')
-    } catch (e) {
-      alert(e.response?.data?.message || e.message)
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/events/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert("Evento eliminado correctamente");
+      navigate("/events"); // 🔹 Navegar a lista de eventos
+    } catch (error) {
+      console.error("Error al eliminar el evento:", error);
+      alert("No se pudo eliminar el evento.");
     }
-  }
+  };
 
-  if (err) return <div className="container py-8">{err}</div>
-  if (!ev) return <div className="container py-8">Cargando...</div>
+  if (!event) return <div>Cargando...</div>;
 
   return (
-    <div className="container mx-auto py-8 max-w-2xl bg-white p-6 rounded shadow">
+    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow rounded space-y-4">
+      <h2 className="text-2xl font-bold text-blue-600">{event.titulo}</h2>
+      <p><strong>Fecha:</strong> {new Date(event.fecha).toLocaleDateString()}</p>
+      <p><strong>Lugar:</strong> {event.lugar}</p>
+      <p><strong>Descripción:</strong> {event.descripcion}</p>
+      <p><strong>Tipo:</strong> {event.tipo}</p>
 
-      <h1 className="text-3xl font-bold text-blue-600 mb-4">
-        {ev.titulo}
-      </h1>
-
-      <p className="text-gray-700 mb-2"><strong>Descripción:</strong> {ev.descripcion}</p>
-
-      <p className="text-gray-700 mb-2"><strong>Fecha:</strong> {new Date(ev.fecha).toLocaleDateString()}</p>
-
-      <p className="text-gray-700 mb-2"><strong>Hora de inicio:</strong> {ev.horaInicio || "No especificada"}</p>
-
-      <p className="text-gray-700 mb-2"><strong>Hora de fin:</strong> {ev.horaFin || "No especificada"}</p>
-
-      <p className="text-gray-700 mb-2"><strong>Lugar:</strong> {ev.lugar}</p>
-
-      <p className="text-gray-700 mb-2"><strong>Tipo de evento:</strong> {ev.tipo}</p>
-
-    
-<p className="text-gray-700 mb-6">
-  <strong>Organizador:</strong> {ev.userId?.name || "No especificado"}
-</p>
-
-
-      <div className="flex gap-3">
-        <Link
-          to={`/events/${id}/edit`}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+      <div className="flex space-x-4">
+        <button
+          onClick={() => navigate(`/events/${id}/edit`)}
+          className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
         >
           Editar
-        </Link>
-
+        </button>
         <button
-          onClick={onDelete}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+          onClick={handleDelete}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
         >
           Eliminar
         </button>
       </div>
-
     </div>
-  )
+  );
 }
-
-export default EventDetail
-
